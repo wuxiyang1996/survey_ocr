@@ -1,0 +1,39 @@
+# Secrets
+.env
+.env.local
+
+# Generated OCR output
+output/
+
+# Raw scan inputs (see src/config.py SCANS_DIR)
+scans/
+
+# Large PDF inputs in repo root — use `git add -f path/to/file.pdf` to track one-off files
+*.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Tools / test
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
