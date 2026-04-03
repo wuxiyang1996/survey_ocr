@@ -53,7 +53,7 @@ def extract_survey(image_paths: list[Path]) -> dict:
             "json_schema": build_json_schema(),
         },
         temperature=0.0,
-        max_tokens=4096,
+        max_completion_tokens=4096,
     )
 
     raw = response.choices[0].message.content

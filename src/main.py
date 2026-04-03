@@ -19,11 +19,16 @@ from tqdm import tqdm
 from .config import SCANS_DIR, OUTPUT_DIR, JSON_DIR, OPENAI_API_KEY
 from .pdf_to_images import pdf_to_images
 from .extractor import extract_survey
+from .segmenter import segment_pages
+from .segment_extractor import extract_segments
 from .aggregator import aggregate
 from .qa_report import generate_qa_report
 
+SEGMENTS_DIR = OUTPUT_DIR / "segments"
 
-def _process_one(pdf_path: Path, force: bool = False) -> bool:
+
+def _process_one(pdf_path: Path, force: bool = False,
+                 use_segmented: bool = True) -> bool:
     """
     Process a single scanned PDF.  Returns True on success, False on failure.
     Skips extraction if a JSON output already exists (unless *force*).
@@ -40,7 +45,12 @@ def _process_one(pdf_path: Path, force: bool = False) -> bool:
         return False
 
     try:
-        result = extract_survey(image_paths)
+        if use_segmented:
+            seg_dir = SEGMENTS_DIR / pdf_path.stem
+            segments = segment_pages(image_paths, seg_dir)
+            result = extract_segments(segments, verbose=True)
+        else:
+            result = extract_survey(image_paths)
     except Exception as exc:
         print(f"\n  ERROR extracting {pdf_path.name}: {exc}")
         return False
@@ -56,6 +66,7 @@ def run(
     output_dir: Path = OUTPUT_DIR,
     force: bool = False,
     aggregate_only: bool = False,
+    use_segmented: bool = True,
 ):
     if not aggregate_only:
         if not OPENAI_API_KEY or OPENAI_API_KEY == "your-api-key-here":
@@ -75,8 +86,11 @@ def run(
         success = 0
         failed: list[str] = []
 
+        mode = "segmented" if use_segmented else "whole-page"
+        print(f"Mode: {mode}")
+
         for pdf_path in tqdm(pdfs, desc="Extracting", unit="file"):
-            ok = _process_one(pdf_path, force=force)
+            ok = _process_one(pdf_path, force=force, use_segmented=use_segmented)
             if ok:
                 success += 1
             else:
@@ -121,6 +135,10 @@ def main():
         "--aggregate-only", action="store_true",
         help="Skip extraction; just rebuild CSV/Excel from existing JSONs.",
     )
+    parser.add_argument(
+        "--no-segment", action="store_true",
+        help="Use the old whole-page extraction instead of per-question segmentation.",
+    )
 
     args = parser.parse_args()
     run(
@@ -129,6 +147,7 @@ def main():
         output_dir=args.output_dir,
         force=args.force_reprocess,
         aggregate_only=args.aggregate_only,
+        use_segmented=not args.no_segment,
     )
 
 
