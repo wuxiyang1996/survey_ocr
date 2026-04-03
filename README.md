@@ -27,6 +27,12 @@ Before you can use this tool, make sure you have the following three things set 
 
 Python is the programming language this tool is written in.
 
+- **One-line install (optional):**
+  - **Windows (winget):** `winget install -e --id Python.Python.3.12`
+  - **Mac (Homebrew):** `brew install python`
+  - **Linux (Debian/Ubuntu):** `sudo apt install python3 python3-pip python3-venv`
+  If you use another OS or package manager, install from <https://www.python.org/downloads/> as below.
+
 - **Check if you already have it:** Open a terminal (Command Prompt or PowerShell on Windows) and type:
   ```
   python --version
@@ -38,16 +44,19 @@ Python is the programming language this tool is written in.
 
 Poppler is a behind-the-scenes tool that converts PDF pages into images so the AI can read them.
 
-- **On Windows:**
+- **One-line install (optional):**
+  - **Windows (winget):** `winget install -e --id oschwartz10612.Poppler`
+  - **Mac (Homebrew):** `brew install poppler`
+  - **Linux (Debian/Ubuntu):** `sudo apt install poppler-utils`
+  After installing on Windows, **open a new terminal** and confirm with `pdftoppm -h`. If winget is not available, use the manual steps below.
+
+- **On Windows (manual, if you prefer not to use winget):**
   1. Download a pre-built Poppler package from <https://github.com/osber/poppler-windows/releases> (or search for "poppler windows download").
   2. Extract the downloaded zip file to a folder, for example `C:\poppler`.
   3. Add the `bin` folder (e.g. `C:\poppler\Library\bin`) to your system PATH:
      - Search for "Environment Variables" in the Windows Start menu.
      - Under "System variables", find `Path`, click Edit, and add the Poppler `bin` folder.
   4. **Verify:** Open a new terminal and type `pdftoppm -h`. If you see help text, Poppler is installed correctly.
-
-- **On Mac:** Open a terminal and run `brew install poppler`.
-- **On Linux:** Run `sudo apt install poppler-utils`.
 
 ### 3. An OpenAI API Key
 
