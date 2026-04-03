@@ -7,7 +7,7 @@ This tool reads hand-filled paper surveys that have been scanned into PDF files.
 ## Table of Contents
 
 1. [What You Need Before Starting](#what-you-need-before-starting)
-2. [Getting an OpenAI API Key](#getting-an-openai-api-key)
+2. [Your OpenAI API key (from email)](#your-openai-api-key-from-email)
 3. [Installing the Software](#installing-the-software)
 4. [Setting Up Your API Key](#setting-up-your-api-key)
 5. [Processing Your PDFs](#processing-your-pdfs)
@@ -60,28 +60,22 @@ Poppler is a behind-the-scenes tool that converts PDF pages into images so the A
 
 ### 3. An OpenAI API Key
 
-This tool uses OpenAI's AI to read the handwriting in your scanned surveys. You will need a paid OpenAI API account. See the next section for how to get one.
+This tool uses OpenAI's AI to read the handwriting in your scanned surveys. **Use the API key that was sent to you by email for this project** — it is like a password that lets the tool talk to OpenAI's servers on the project's behalf.
+
+**Do not create your own OpenAI API key** on the OpenAI website for this workflow. Billing and access are set up for the shared key from the email; making a personal key is unnecessary and can cause confusion or extra cost on the wrong account.
+
+See the next section for where to put that key in the project.
 
 ---
 
-## Getting an OpenAI API Key
+## Your OpenAI API key (from email)
 
-The API key is like a password that lets this tool talk to OpenAI's servers. Here's how to get one:
+You should have received an API key by email (it looks like `sk-...`).
 
-1. **Create an OpenAI account** (or sign in if you already have one):
-   Go to <https://platform.openai.com/signup> and sign up.
+1. **Use only that key** in your `.env` file, as described in [Setting Up Your API Key](#setting-up-your-api-key) below.
+2. **Do not** go to <https://platform.openai.com/api-keys> and create a new secret key for this project unless project staff have explicitly told you to use a personal OpenAI account.
 
-2. **Add payment information:**
-   Go to <https://platform.openai.com/settings/organization/billing/overview> and add a credit card. The AI calls cost money — roughly $0.01–0.05 per survey page processed, depending on the model.
-
-3. **Create an API key:**
-   - Go to <https://platform.openai.com/api-keys>.
-   - Click **"Create new secret key"**.
-   - Give it a name like "Survey Extraction" and click Create.
-   - **Copy the key immediately** — it starts with `sk-` and you won't be able to see it again after closing the dialog. Save it somewhere safe (like a password manager).
-
-4. **Set a spending limit (recommended):**
-   Go to <https://platform.openai.com/settings/organization/limits> and set a monthly budget so you don't accidentally overspend.
+If you did not receive the email or the key does not work, contact the person or team who shared the project materials — they can resend or replace the key.
 
 ---
 
@@ -106,9 +100,11 @@ The API key is like a password that lets this tool talk to OpenAI's servers. Her
 
 The tool reads your OpenAI API key from a small configuration file called `.env`.
 
+**Paste the key from the project email** — not a key you created yourself on OpenAI's site, unless you were told to use a personal account.
+
 1. In the project's root folder (`side_proj_OCR`), create a new text file named `.env` (note the dot at the beginning — it has no name before the dot).
 
-2. Open the file in any text editor (Notepad works fine) and paste the following, replacing the placeholder with your actual key:
+2. Open the file in any text editor (Notepad works fine) and paste the following, replacing the placeholder with the key from your email:
 
    ```
    OPENAI_API_KEY=sk-paste-your-real-key-here
@@ -272,7 +268,7 @@ This usually means Poppler is not installed or not on your PATH. See the [Popple
 
 ### "openai.AuthenticationError" or "Incorrect API key"
 
-Your API key is invalid or expired. Go to <https://platform.openai.com/api-keys>, create a new key, and update your `.env` file.
+Your API key is invalid, expired, or was copied incorrectly. **Use the key from the project email** (or ask the project contact for a new one). Do not switch to a personally created key unless staff have told you to.
 
 ### "openai.RateLimitError"
 
@@ -291,7 +287,7 @@ You've hit OpenAI's rate limit. This can happen if you process many PDFs at once
 
 ```
 side_proj_OCR/
-├── .env                  ← Your API key (you create this)
+├── .env                  ← Paste the API key from the project email (you create this file)
 ├── requirements.txt      ← Python package list
 ├── scans/                ← Put your scanned PDF files here
 │   ├── scan0011.pdf      ← Example filled-in surveys
